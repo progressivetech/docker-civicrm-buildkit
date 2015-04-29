@@ -1,0 +1,3 @@
+#!/bin/sh
+exec 2>&1
+exec env -i PATH=/usr/bin:/usr/sbin APACHE_ARGUMENTS="-D NO_DETACH" apachectl start
