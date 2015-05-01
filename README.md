@@ -7,7 +7,7 @@ And, the civicrm-buildkit directory is available on the host and in the containe
 
 The workflow:
 
- * ssh into the container (ssh -p 222 www-data@localhost)
+ * ssh into the container (ssh -p 222s www-data@localhost)
  * run all buildkit commands to create the sites you want:
   * amp config
    * For MySQL DSN, enter: mysql://root@localhost (no root MySQL password is set)
@@ -23,7 +23,6 @@ Then, work via your host computer:
  * add git repositories, etc via your host computer
 
 ## Steps to use ##
-
 Note: this is not a normal Docker file that pulls an image from the Docker network. It's generally not a good idea to pull code blindly from the Internet.
 
 Instead, create your own base image with these commands:
@@ -39,17 +38,35 @@ echo "Removing temp directory"
 sudo rm -rf "$temp"
 ```
 
-Before starting, copy your id_rsa.pub file to this directory so you can have ssh access to the container.
+For the remaining steps, I assume you are in the directory containing the Dockerfile.
 
-This Docker image is intended to be started with:
+Copy your ssh public key to your current directory:
+
+```
+cp ~/.ssh/id_rsa.pub
+```
+
+This file will be granted access to ssh into the container.
+
+Next, create the directory that will be mounted in the container and hold the buildkit data.
+
+```
+mkdir -p civicrm-buildkit
+```
+
+Build the civicrm-buildkit image:
 
 ```
 docker build -t civicrm-buildkit ./
-mkdir -p civicrm
+```
+
+Now, create the container and run it:
+
+```
 docker create -v "$(pwd)/civicrm:/var/www/civicrm" -e "DOCKER_UID=$UID" -p 2222:22 -p 8001:8001 --name civicrm-buildkit civicrm-buildkit
 docker run civicrm-buildkit
-ssh -p 2222 www-data@127.0.0.1
 ```
 
 You have full access to the civicrm-buildkit directory from the host so you can git pull and push as needed.
 
+Go back to the summary to review what to do next.
