@@ -26,11 +26,13 @@ RUN sed -i "s/^key_buffer\s/key_buffer_size\t/g" /etc/mysql/my.cnf
 RUN sed -i "s/^myisam-recover\s/myisam-recover-options\t/g" /etc/mysql/my.cnf
 
 # Avoid Apache complaint about server name
-RUN sed -i "s/#ServerName www.example.com/ServerName civicrm-buildkit/" /etc/apache2/sites-available/000-default.conf
+RUN echo "ServerName civicrm-buildkit" > /etc/apache2/conf-available/civicrm-buildkit.conf
+RUN a2enconf civicrm-buildkit 
 
 # Configure Apache to work with amp
 RUN echo 'Include /var/www/.amp/apache.d/*.conf' > /etc/apache2/conf-available/amp.conf
 RUN a2enconf amp
+RUN a2enmod rewrite
 
 # Debian installs node as nodejs, other programs want to see it as node
 RUN [ ! -h /usr/bin/node ] && ln -s /usr/bin/nodejs /usr/bin/node
@@ -56,7 +58,7 @@ RUN mkdir /var/www/civicrm
 RUN chown -R www-data:www-data /var/www
 
 # Allow www-data user to restart apache
-RUN echo www-data ALL=NOPASSWD: /usr/bin/sv restart apache > /etc/sudoers.d/civicrm-buildkit
+RUN echo "www-data ALL=NOPASSWD: /usr/bin/sv restart apache, /usr/bin/sv reload apache" > /etc/sudoers.d/civicrm-buildkit
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
