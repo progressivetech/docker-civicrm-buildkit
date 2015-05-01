@@ -60,15 +60,17 @@ You have full access to the civicrm-buildkit directory from the host so you can 
  * run all buildkit commands to create the sites you want:
   * `amp config`
    * For MySQL DSN, enter: mysql://root@localhost (no root MySQL password is set)
-   * For Permission type, enter 0 (the directories and the web server are both running as www-data)
+   * For Permission type, enter 0 "none" (the directories and the web server are both running as www-data)
    * For Apache version, enter apache24
+  * `sudo sv reload apache`
   * `amp test`
   * `civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin`
-  * Restart apache: sudo sv restart apache
+  * Restart apache: sudo sv restart apache (if you trouble with this command you may need to stop and start the container)
 
 Then, work via your host computer:
 
  * access your sites via a browser on your host computer (http://localhost:8001).
  * modify code via your editor on your host computer via the civicrm-buildkit directory
+   (look in civicrm-buildkit/build/mycivi)
  * add git repositories, etc via your host computer
 
