@@ -4,8 +4,8 @@ set -e
 # Download civicrm buildkit if it's not there.
 if [ ! -d /var/www/civicrm/civicrm-buildkit ]; then
   printf "Initializing civicrm-buildkit.\n"
-  cd /var/www/civicrm && git clone https://github.com/civicrm/civicrm-buildkit.git buildkit
-  cd /var/www/civicrm/buildkit && ./bin/civi-download-tools
+  cd /var/www/civicrm && git clone https://github.com/civicrm/civicrm-buildkit.git
+  cd /var/www/civicrm/civicrm-buildkit && ./bin/civi-download-tools
   chown -R www-data:www-data /var/www/civicrm
 fi
 
@@ -20,7 +20,7 @@ if [ -n "$DOCKER_UID" ]; then
     printf "UIDs already match.\n"
   else
     printf "Updating UID from %s to %s.\n" "$current_uid" "$DOCKER_UID"
-    usermod -u "$DOCKER_UID" www-data && chmod -R "$DOCKER_UID" /var/www/civicrm
+    usermod -u "$DOCKER_UID" www-data && chown -R "$DOCKER_UID" /var/www/civicrm
   fi
 fi
 
@@ -29,4 +29,5 @@ if [ "$1" = 'runsvdir' ]; then
   set -- "$@" -P /etc/service
 fi
 
+printf "running: %s\n" "$@"
 exec "$@"
