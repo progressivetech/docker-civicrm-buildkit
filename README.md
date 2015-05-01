@@ -44,7 +44,7 @@ For the remaining steps, I assume you are in the directory containing the Docker
 Copy your ssh public key to your current directory:
 
 ```
-cp ~/.ssh/id_rsa.pub
+cp ~/.ssh/id_rsa.pub .
 ```
 
 This file will be granted access to ssh into the container.
