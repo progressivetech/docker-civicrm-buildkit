@@ -1,7 +1,7 @@
 # CiviCRM Buildkit Docker Image #
 
 ## Summary ##
-Builds a completely self-contained container that runs CiviCRM Buildkit (MySQL, Apache, PHP and SSH). It manages services using runit.
+Builds a completely self-contained container that runs [CiviCRM Buildkit](https://github.com/civicrm/civicrm-buildkit) via MySQL, Apache, PHP and SSH). It manages services using runit.
 
 The civicrm-buildkit directory is available on the host and in the container.
 
@@ -13,7 +13,8 @@ Instead, create your own base image with these commands:
 ```
 temp=$(mktemp -d)
 echo "Running debootstrap"
-sudo debootstrap --variant=minbase jessie "$temp" http://mirror.cc.columbia.edu/debian
+sudo debootstrap --variant=minbase jessie "$temp" \
+  http://mirror.cc.columbia.edu/debian
 echo "Importing into docker"
 cd "$temp" && sudo tar -c . | docker import - ptp-base
 cd
@@ -46,7 +47,8 @@ docker build -t civicrm-buildkit ./
 Now, create the container and run it:
 
 ```
-docker create -v "$(pwd)/civicrm:/var/www/civicrm" -e "DOCKER_UID=$UID" -p 2222:22 -p 8001:8001 --name civicrm-buildkit civicrm-buildkit
+docker create -v "$(pwd)/civicrm:/var/www/civicrm" -e "DOCKER_UID=$UID" \
+  -p 2222:22 -p 8001:8001 --name civicrm-buildkit civicrm-buildkit
 docker run civicrm-buildkit
 ```
 
