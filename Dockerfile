@@ -30,7 +30,7 @@ RUN echo "ServerName civicrm-buildkit" > /etc/apache2/conf-available/civicrm-bui
 RUN a2enconf civicrm-buildkit 
 
 # Configure Apache to work with amp
-RUN echo 'Include /var/www/.amp/apache.d/*.conf' > /etc/apache2/conf-available/amp.conf
+RUN echo 'IncludeOptional /var/www/.amp/apache.d/*.conf' > /etc/apache2/conf-available/amp.conf
 RUN a2enconf amp
 RUN a2enmod rewrite
 
