@@ -15,6 +15,7 @@ RUN apt-get update && \
   git \
   wget \
   php5-curl \
+  php5-gd \
   nodejs \
   npm 
 
@@ -25,6 +26,10 @@ RUN sed -i "s/^myisam-recover\s/myisam-recover-options\t/g" /etc/mysql/my.cnf
 
 # Avoid Apache complaint about server name
 RUN sed -i "s/#ServerName www.example.com/ServerName civicrm-buildkit/" /etc/apache2/sites-available/000-default.conf
+
+# Configure Apache to work with amp
+RUN echo 'Include /var/www/.amp/apache.d/*.conf' > /etc/apache2/conf-available/amp.conf
+RUN a2enconf amp
 
 # Debian installs node as nodejs, other programs want to see it as node
 RUN [ ! -h /usr/bin/node ] && ln -s /usr/bin/nodejs /usr/bin/node
@@ -42,8 +47,12 @@ RUN update-service --add /etc/sv/sshd
 RUN mkdir /var/www/.ssh
 COPY id_rsa.pub /var/www/.ssh/authorized_keys
 RUN usermod -s /bin/bash www-data
+RUN echo 'export PATH=/var/www/civicrm/civicrm-buildkit/bin:$PATH' > /var/www/.profile
 
 RUN mkdir /var/www/civicrm
+
+# Ensure www-data owns it's home directory so amp will work.
+RUN chown -R www-data:www-data /var/www
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
