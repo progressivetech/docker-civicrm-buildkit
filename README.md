@@ -1,7 +1,7 @@
 # CiviCRM Buildkit Docker Image #
 
 ## Summary ##
-Builds a completely self-contained container that runs [CiviCRM Buildkit](https://github.com/civicrm/civicrm-buildkit) via MySQL, Apache, PHP and SSH). It manages services using runit.
+Builds a completely self-contained container that runs [CiviCRM Buildkit](https://github.com/civicrm/civicrm-buildkit) via MySQL, Apache, PHP and SSH. It manages services using runit.
 
 The civicrm-buildkit directory is available on the host and in the container.
 
@@ -30,7 +30,7 @@ Copy your ssh public key to your current directory:
 cp ~/.ssh/id_rsa.pub .
 ```
 
-This file will be granted access to ssh into the container.
+This file will be copied to the container's authorized_ids file so you can ssh in without a password.
 
 Next, create the directory that will be mounted in the container and hold the buildkit data.
 
@@ -56,14 +56,14 @@ You have full access to the civicrm-buildkit directory from the host so you can 
 
 ## The workflow ##
 
- * ssh into the container (ssh -p 222s www-data@localhost)
+ * ssh into the container (`ssh -p 2222 www-data@localhost`)
  * run all buildkit commands to create the sites you want:
-  * amp config
+  * `amp config`
    * For MySQL DSN, enter: mysql://root@localhost (no root MySQL password is set)
    * For Permission type, enter 0 (the directories and the web server are both running as www-data)
    * For Apache version, enter apache24
-  * amp test
-  * civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin 
+  * `amp test`
+  * `civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin`
   * Restart apache: sudo sv restart apache
 
 Then, work via your host computer:
