@@ -17,6 +17,7 @@ RUN apt-get update && \
   php5-curl \
   php5-gd \
   nodejs \
+  sudo \
   npm 
 
 # Avoid key buffer size warnings and myisam-recover warnings
@@ -53,6 +54,9 @@ RUN mkdir /var/www/civicrm
 
 # Ensure www-data owns it's home directory so amp will work.
 RUN chown -R www-data:www-data /var/www
+
+# Allow www-data user to restart apache
+RUN echo www-data ALL=NOPASSWD: /usr/bin/sv restart apache > /etc/sudoers.d/civicrm-buildkit
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

@@ -1,7 +1,7 @@
 # CiviCRM Buildkit Docker Image #
 
 ## Summary ##
-Builds a completely self-contained container that runs CiviCRM Buildkit (MySQL, Apache, PHP and SSH).
+Builds a completely self-contained container that runs CiviCRM Buildkit (MySQL, Apache, PHP and SSH). It manages services using runit.
 
 And, the civicrm-buildkit directory is available on the host and in the container.
 
@@ -15,6 +15,7 @@ The workflow:
    * For Apache version, enter apache24
   * amp test
   * civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin 
+  * Restart apache: sudo sv restart apache
 
 Then, work via your host computer:
 
