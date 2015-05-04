@@ -29,9 +29,7 @@ RUN sed -i "s/^myisam-recover\s/myisam-recover-options\t/g" /etc/mysql/my.cnf
 RUN echo "ServerName civicrm-buildkit" > /etc/apache2/conf-available/civicrm-buildkit.conf
 RUN a2enconf civicrm-buildkit 
 
-# Configure Apache to work with amp
-RUN echo 'IncludeOptional /var/www/.amp/apache.d/*.conf' > /etc/apache2/conf-available/amp.conf
-RUN a2enconf amp
+# Drupal requires mod rewrite.
 RUN a2enmod rewrite
 
 # Debian installs node as nodejs, other programs want to see it as node
