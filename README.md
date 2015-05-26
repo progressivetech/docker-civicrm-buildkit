@@ -66,6 +66,8 @@ You have full access to the civicrm-buildkit directory from the host so you can 
   * `amp test`
   * `civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin`
   * Restart apache: sudo sv restart apache (if you trouble with this command you may need to stop and start the container)
+  * Destroy and start over:
+   * `civibuild create mycivi --force`
 
 Then, work via your host computer:
 
