@@ -18,6 +18,7 @@ RUN apt-get update && \
   php5-gd \
   nodejs \
   sudo \
+  vim \
   npm 
 
 # Avoid key buffer size warnings and myisam-recover warnings
