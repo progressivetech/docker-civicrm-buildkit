@@ -8,7 +8,9 @@ if [ ! -d /var/www/civicrm/civicrm-buildkit ]; then
   printf "Initializing civicrm-buildkit.\n"
   cd /var/www/civicrm && git clone https://github.com/civicrm/civicrm-buildkit.git
   cd /var/www/civicrm/civicrm-buildkit && ./bin/civi-download-tools
-  chown -R www-data:www-data /var/www/civicrm
+  # We have to re-chown entire directory because civicrm-buildkit creates hidden
+  # directories (e.g. ~/.amp).
+  chown -R www-data:www-data /var/www/
 fi
 
 # Ensure that apache is configured to work properly with AMP. We don't do this in the 
