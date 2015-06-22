@@ -63,7 +63,7 @@ You have full access to the civicrm-buildkit directory from the host so you can 
    * For MySQL DSN, enter: mysql://root@localhost (no root MySQL password is set)
    * For Permission type, enter 0 "none" (the directories and the web server are both running as www-data)
    * For Apache version, enter apache24
-  * `sudo sv reload apache`
+  * `sudo apache2ctl graceful`
   * `amp test`
   * `civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin`
   * Restart apache: sudo sv restart apache (if you trouble with this command you may need to stop and start the container)

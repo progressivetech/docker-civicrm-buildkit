@@ -56,7 +56,7 @@ RUN mkdir /var/www/civicrm
 RUN chown -R www-data:www-data /var/www
 
 # Allow www-data user to restart apache
-RUN echo "www-data ALL=NOPASSWD: /usr/bin/sv restart apache, /usr/bin/sv reload apache" > /etc/sudoers.d/civicrm-buildkit
+RUN echo "www-data ALL=NOPASSWD: /usr/bin/sv restart apache, /usr/bin/sv reload apache, /usr/sbin/apache2ctl" > /etc/sudoers.d/civicrm-buildkit
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
