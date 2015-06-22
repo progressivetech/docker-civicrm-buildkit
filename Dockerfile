@@ -47,6 +47,7 @@ RUN update-service --add /etc/sv/sshd
 # Give ssh access via key
 RUN mkdir /var/www/.ssh
 COPY id_rsa.pub /var/www/.ssh/authorized_keys
+COPY id_rsa.pub /root/.ssh/authorized_keys
 RUN usermod -s /bin/bash www-data
 RUN echo 'export PATH=/var/www/civicrm/civicrm-buildkit/bin:$PATH' > /var/www/.profile
 
