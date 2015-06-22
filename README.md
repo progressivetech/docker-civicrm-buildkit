@@ -13,6 +13,7 @@ Instead, create your own base image with these commands:
 ```
 temp=$(mktemp -d)
 echo "Running debootstrap"
+sudo apt-get install deboostrap
 sudo debootstrap --variant=minbase jessie "$temp" \
   http://mirror.cc.columbia.edu/debian
 echo "Importing into docker"
