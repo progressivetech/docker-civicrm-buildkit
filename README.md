@@ -13,6 +13,7 @@ Instead, create your own base image with these commands:
 ```
 temp=$(mktemp -d)
 echo "Running debootstrap"
+sudo apt-get install deboostrap
 sudo debootstrap --variant=minbase jessie "$temp" \
   http://mirror.cc.columbia.edu/debian
 echo "Importing into docker"
@@ -58,12 +59,9 @@ You have full access to the civicrm-buildkit directory from the host so you can 
 
  * ssh into the container (`ssh -p 2222 www-data@localhost`)
  * run all buildkit commands to create the sites you want:
-  * `amp config`
-   * For MySQL DSN, enter: mysql://root@localhost (no root MySQL password is set)
-   * For Permission type, enter 0 "none" (the directories and the web server are both running as www-data)
-   * For Apache version, enter apache24
-  * `sudo sv reload apache`
-  * `amp test`
+  * `amp test` (first test, should fail)
+  * `sudo apache2ctl graceful`
+  * `amp test` (second test, should pass)
   * `civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin`
   * Restart apache: sudo sv restart apache (if you trouble with this command you may need to stop and start the container)
   * Destroy and start over:

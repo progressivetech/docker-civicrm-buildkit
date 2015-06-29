@@ -47,6 +47,7 @@ RUN update-service --add /etc/sv/sshd
 # Give ssh access via key
 RUN mkdir /var/www/.ssh
 COPY id_rsa.pub /var/www/.ssh/authorized_keys
+COPY id_rsa.pub /root/.ssh/authorized_keys
 RUN usermod -s /bin/bash www-data
 RUN echo 'export PATH=/var/www/civicrm/civicrm-buildkit/bin:$PATH' > /var/www/.profile
 
@@ -56,7 +57,10 @@ RUN mkdir /var/www/civicrm
 RUN chown -R www-data:www-data /var/www
 
 # Allow www-data user to restart apache
-RUN echo "www-data ALL=NOPASSWD: /usr/bin/sv restart apache, /usr/bin/sv reload apache" > /etc/sudoers.d/civicrm-buildkit
+RUN echo "www-data ALL=NOPASSWD: /usr/bin/sv restart apache, /usr/bin/sv reload apache, /usr/sbin/apache2ctl" > /etc/sudoers.d/civicrm-buildkit
+
+## Allow www-data to run mysql cli tools
+RUN echo "[client]" > /var/www/.my.cnf ; echo "user=root" >> /var/www/.my.cnf
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
