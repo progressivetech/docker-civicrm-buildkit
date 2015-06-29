@@ -50,7 +50,7 @@ Now, create the container and run it:
 ```
 docker create -v "$(pwd)/civicrm:/var/www/civicrm" -e "DOCKER_UID=$UID" \
   -p 2222:22 -p 8001:8001 --name civicrm-buildkit civicrm-buildkit
-docker run civicrm-buildkit
+docker start civicrm-buildkit
 ```
 
 You have full access to the civicrm-buildkit directory from the host so you can git pull and push as needed.
