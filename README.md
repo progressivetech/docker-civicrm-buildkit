@@ -17,7 +17,7 @@ sudo apt-get install deboostrap
 sudo debootstrap --variant=minbase jessie "$temp" \
   http://mirror.cc.columbia.edu/debian
 echo "Importing into docker"
-cd "$temp" && sudo tar -c . | docker import - ptp-base
+cd "$temp" && sudo tar -c . | docker import - my-jessie 
 cd
 echo "Removing temp directory"
 sudo rm -rf "$temp"
