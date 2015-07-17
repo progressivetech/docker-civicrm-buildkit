@@ -36,7 +36,7 @@ This file will be copied to the container's authorized_ids file so you can ssh i
 Next, create the directory that will be mounted in the container and hold the buildkit data.
 
 ```
-mkdir -p civicrm-buildkit
+mkdir -p civicrm
 ```
 
 Build the civicrm-buildkit image:
