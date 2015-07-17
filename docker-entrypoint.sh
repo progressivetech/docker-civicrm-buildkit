@@ -13,11 +13,15 @@ fi
 ## Configure amp
 sudo -u www-data -H /var/www/civicrm/civicrm-buildkit/bin/amp config:set --mysql_type=dsn --mysql_dsn=mysql://root@localhost --httpd_type=apache24 --perm_type=none
 
+if [ ! -e /var/www/.amp ]; then
+  ln -s /var/www/civicrm/amp /var/www/.amp
+fi
+
 # Ensure that apache is configured to work properly with AMP. We don't do this in the 
 # Docker file because then apache will complain if the directory doesn't exist.
-mkdir -p /var/www/civicrm/.amp/apache.d
+mkdir -p /var/www/.amp/apache.d
 if [ ! -f /etc/apache2/conf-available/amp.conf ]; then 
-  echo 'IncludeOptional /var/www/civicrm/.amp/apache.d/*.conf' > /etc/apache2/conf-available/amp.conf
+  echo 'IncludeOptional /var/www/.amp/apache.d/*.conf' > /etc/apache2/conf-available/amp.conf
   /usr/sbin/a2enconf amp
 fi
 
@@ -38,6 +42,9 @@ fi
 
 ## Ensure that www-data user has permission to all files (eg /var/www/.amp, /var/www/civicrm/civicrm-buildkit/build/)
 chown -R www-data:www-data /var/www/
+
+# Get the symlink too.
+chown --no-dereference /var/www/.amp
 
 if [ "$1" = 'runsvdir' ]; then
   export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
