@@ -15,9 +15,9 @@ sudo -u www-data -H /var/www/civicrm/civicrm-buildkit/bin/amp config:set --mysql
 
 # Ensure that apache is configured to work properly with AMP. We don't do this in the 
 # Docker file because then apache will complain if the directory doesn't exist.
-mkdir -p /var/www/.amp/apache.d
+mkdir -p /var/www/civicrm/.amp/apache.d
 if [ ! -f /etc/apache2/conf-available/amp.conf ]; then 
-  echo 'IncludeOptional /var/www/.amp/apache.d/*.conf' > /etc/apache2/conf-available/amp.conf
+  echo 'IncludeOptional /var/www/civicrm/.amp/apache.d/*.conf' > /etc/apache2/conf-available/amp.conf
   /usr/sbin/a2enconf amp
 fi
 
