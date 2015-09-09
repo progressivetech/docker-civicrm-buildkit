@@ -36,6 +36,10 @@ RUN a2enmod rewrite
 # Debian installs node as nodejs, other programs want to see it as node
 RUN [ ! -h /usr/bin/node ] && ln -s /usr/bin/nodejs /usr/bin/node
 
+# We don't want to ever send email. But we also don't want an error when 
+# Drupal or CiviCRM tries
+RUN ln -s /bin/true /usr/sbin/sendmail
+
 # Handle service starting with runit.
 RUN mkdir /etc/sv/mysql /etc/sv/apache /etc/sv/sshd
 COPY mysql.run /etc/sv/mysql/run

@@ -44,7 +44,7 @@ fi
 chown -R www-data:www-data /var/www/
 
 # Get the symlink too.
-chown --no-dereference /var/www/.amp
+chown --no-dereference www-data:www-data /var/www/.amp
 
 if [ "$1" = 'runsvdir' ]; then
   export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
