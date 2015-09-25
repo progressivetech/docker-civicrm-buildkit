@@ -8,19 +8,25 @@ The civicrm-buildkit directory is available on the host and in the container.
 ## Steps to create ##
 Note: this is not a normal Docker file that pulls an image from the Docker network. It's generally not a good idea to pull code blindly from the Internet.
 
-Instead, create your own base image with these commands:
+Instead, create your own base image by running these commands AS ROOT (adjust the timezone if you want):
 
 ```
 temp=$(mktemp -d)
-echo "Running debootstrap"
-sudo apt-get install deboostrap
-sudo debootstrap --variant=minbase jessie "$temp" \
-  http://mirror.cc.columbia.edu/debian
+apt-get install deboostrap
+debootstrap --variant=minbase --include=apt-utils,less,vim,locales,libterm-readline-gnu-perl jessie "$temp" http://http.us.debian.org/debian/ 
+echo "deb http://security.debian.org/ jessie/updates main" > "$temp/etc/apt/sources.list.d/security.list"
+echo "deb http://ftp.us.debian.org/debian/ jessie-updates main" > "$temp/etc/apt/sources.list.d/update.list"
+echo "Upgrading"
+chroot "$temp" apt-get update
+chroot "$temp" apt-get -y dist-upgrade
+# Make all servers America/New_York
+echo "America/New_York" > "$temp/etc/timezone"
+chroot "$temp" /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
 echo "Importing into docker"
-cd "$temp" && sudo tar -c . | docker import - my-jessie 
+cd "$temp" && tar -c . | docker import - my-jessie 
 cd
 echo "Removing temp directory"
-sudo rm -rf "$temp"
+rm -rf "$temp"
 ```
 
 For the remaining steps, I assume you are in the directory containing the Dockerfile.
