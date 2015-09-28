@@ -1,0 +1,63 @@
+#!/bin/bash 
+
+me=$(whoami)
+
+if [ "$me" = "root" ]; then
+  printf "Don't run as root. Run as non-privileged user in the docker group.\n"
+  exit 1
+fi
+
+groups=$(groups)
+if ! echo "$groups" | grep " docker " >/dev/null; then
+  printf "You must be in the docker group to use this script.\n"
+  exit 1
+fi
+
+# Ensure the base image is created.
+if ! docker images | grep ^my-jessie >/dev/null; then
+  # You have to create the base image as root. No automation here.
+  printf "Follow directions in README to build base my-jessie image\n"
+  exit 1
+fi
+
+# If you have an ssh key and it has not yet been copied, copy it.
+if [ ! -e id_rsa.pub -a -f ~/.ssh/id_rsa.pub ]; then
+  cp ~/.ssh/id_rsa.pub .
+fi
+
+# We need this directory to store data.
+mkdir -p civicrm
+
+# If we haven't build the image, build the image.
+if ! docker images | grep ^civicrm-buildkit >/dev/null; then
+  printf "Building the civicrm-buildkit image.\n"
+  docker build -t civicrm-buildkit ./
+fi
+
+# If we haven't build the container, build the container
+if ! docker ps -a | grep ^civicrm-buildkit >/dev/null; then
+  printf "Building the container.\n"
+  docker create -v "$(pwd)/civicrm:/var/www/civicrm" -e "DOCKER_UID=$UID" \
+    -p 2222:22 -p 8001:8001 --name civicrm-buildkit civicrm-buildkit
+fi
+
+if ! docker ps | grep ^civicrm-buildkit >/dev/null; then
+  printf "Starting the container.\n"
+  docker start civicrm-buildkit
+fi
+
+if [ "$?" -eq "0" ]; then
+  printf "Your container was started.\n"
+  printf "You can ssh in with: 'ssh -p 2222 www-data@localhost'\n"
+  printf "Run all buildkit commands to create the sites you want:\n"
+  printf "amp test\n"
+  printf "(first test, should fail)\n"
+  printf "sudo apache2ctl graceful\n"
+  printf "amp test\n"
+  printf "civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin\n"
+  printf "sudo apache2ctl graceful\n"
+  printf "See README.md for more commands and info.\n"
+else
+  printf "Something went wrong starting the container.\n"
+  printf "Try running each command separately.\n"
+fi

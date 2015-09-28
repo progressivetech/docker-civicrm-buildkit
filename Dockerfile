@@ -13,13 +13,25 @@ RUN apt-get update && \
   libapache2-mod-php5 \
   runit \
   git \
+  lsb-release \
+  acl \
   wget \
+  unzip \
+  php5-cli \
+  php5-imap \
+  php5-ldap \
   php5-curl \
+  php5-intl \
   php5-gd \
   nodejs \
   sudo \
   vim \
-  npm 
+  npm \
+  php5-mcrypt \
+  apache2 \
+  nodejs-legacy \
+  ruby\
+  rake
 
 # Avoid key buffer size warnings and myisam-recover warnings
 # See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=751840
@@ -32,9 +44,6 @@ RUN a2enconf civicrm-buildkit
 
 # Drupal requires mod rewrite.
 RUN a2enmod rewrite
-
-# Debian installs node as nodejs, other programs want to see it as node
-RUN [ ! -h /usr/bin/node ] && ln -s /usr/bin/nodejs /usr/bin/node
 
 # We don't want to ever send email. But we also don't want an error when 
 # Drupal or CiviCRM tries
