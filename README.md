@@ -78,7 +78,7 @@ You have full access to the civicrm-buildkit directory from the host so you can 
     * `civibuild destroy mycivi`
     * `civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin`
   * Update civibuild code:
-    * `cd /var/www/civicrm/civicrmbuild-kit`
+    * `cd /var/www/civicrm/civicrm-buildkit`
     * `git pull`
     * `civi-download-tools`
 
