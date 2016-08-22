@@ -12,7 +12,7 @@ Instead, create your own base image by running these commands AS ROOT (adjust th
 
 ```
 temp=$(mktemp -d)
-apt-get install deboostrap
+apt-get install debootstrap
 debootstrap --variant=minbase --include=apt-utils,less,vim,locales,libterm-readline-gnu-perl jessie "$temp" http://http.us.debian.org/debian/ 
 echo "deb http://security.debian.org/ jessie/updates main" > "$temp/etc/apt/sources.list.d/security.list"
 echo "deb http://ftp.us.debian.org/debian/ jessie-updates main" > "$temp/etc/apt/sources.list.d/update.list"
