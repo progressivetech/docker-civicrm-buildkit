@@ -82,6 +82,11 @@ You have full access to the civicrm-buildkit directory from the host so you can 
     * `git pull`
     * `civi-download-tools`
 
+ * Running unit tests (database setup should be working by default)
+   * `cd ~/civicrm/civicrm-buildkit/build/mycivi/sites/all/modules/civicrm/tools`
+   * `scripts/phpunit api_v3_ContactTest` (for example). See 
+     https://wiki.civicrm.org/confluence/display/CRM/Setting+up+your+personal+testing+sandbox+HOWTO
+
 More [documentation available via git](https://github.com/civicrm/civicrm-buildkit).
 
 Then, work via your host computer:

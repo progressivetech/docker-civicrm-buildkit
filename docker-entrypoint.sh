@@ -56,6 +56,13 @@ if [ "$1" = 'runsvdir' ]; then
   fi
   export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
   set -- "$@" -P /etc/service
+
+  # Create tests database so we can run unit tests
+  mysql -e 'CREATE DATABASE IF NOT EXISTS civicrm_tests_dev'
+  mysql -e "GRANT ALL ON civicrm_tests_dev.* TO 'www-data'@'localhost' IDENTIFIED BY 'www-data'"
+  printf "[client]\npassword=www-data\n[mysql]\ndatabase=civicrm_tests_dev\n" > /var/www/.my.cnf
+  chown www-data:www-data /var/www/.my.cnf
+  chmod 600 /var/www/.my.cnf
 fi
 
 exec "$@"
