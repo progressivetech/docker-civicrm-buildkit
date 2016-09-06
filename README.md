@@ -68,7 +68,7 @@ You have full access to the civicrm-buildkit directory from the host so you can 
   * `amp test` (first test, should fail)
   * `sudo apache2ctl graceful`
   * `amp test` (second test, should pass)
-  * `civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin`
+  * `civibuild create mycivi --type drupal-clean --civi-ver 4.7 --url http://localhost:8001 --admin-pass admin`
   * `sudo apache2ctl graceful`
 
  * Maintenance tasks
@@ -76,7 +76,7 @@ You have full access to the civicrm-buildkit directory from the host so you can 
    * `civibuild create mycivi --force`
    * Or...
     * `civibuild destroy mycivi`
-    * `civibuild create mycivi --type drupal-clean --civi-ver 4.6 --url http://localhost:8001 --admin-pass admin`
+    * `civibuild create mycivi --type drupal-clean --civi-ver 4.7 --url http://localhost:8001 --admin-pass admin`
   * Update civibuild code:
     * `cd /var/www/civicrm/civicrm-buildkit`
     * `git pull`
