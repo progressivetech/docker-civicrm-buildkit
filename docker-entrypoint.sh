@@ -14,7 +14,7 @@ if [ "$1" = 'runsvdir' ]; then
   cd /var/www/civicrm/civicrm-buildkit && ./bin/civi-download-tools --full
 
   ## Configure amp
-  sudo -u www-data -H /var/www/civicrm/civicrm-buildkit/bin/amp config:set --mysql_type=dsn --mysql_dsn=mysql://root@localhost --httpd_type=apache24 --perm_type=none
+  sudo -u www-data -H /var/www/civicrm/civicrm-buildkit/bin/amp config:set --db_type=dsn --mysql_dsn=mysql://root@localhost --httpd_type=apache24 --perm_type=none
 
   if [ ! -e /var/www/.amp ]; then
     ln -s /var/www/civicrm/amp /var/www/.amp
@@ -57,6 +57,8 @@ if [ "$1" = 'runsvdir' ]; then
   export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
   set -- "$@" -P /etc/service
 
+  # Give mysql a few seconds to start
+  sleep 3
   # Create tests database so we can run unit tests
   mysql -e 'CREATE DATABASE IF NOT EXISTS civicrm_tests_dev'
   mysql -e "GRANT ALL ON civicrm_tests_dev.* TO 'www-data'@'localhost' IDENTIFIED BY 'www-data'"
