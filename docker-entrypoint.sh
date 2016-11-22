@@ -14,7 +14,7 @@ if [ "$1" = 'runsvdir' ]; then
   cd /var/www/civicrm/civicrm-buildkit && ./bin/civi-download-tools --full
 
   ## Configure amp
-  sudo -u www-data -H /var/www/civicrm/civicrm-buildkit/bin/amp config:set --db_type=dsn --mysql_dsn=mysql://root@localhost --httpd_type=apache24 --perm_type=none
+  sudo -u www-data -H /var/www/civicrm/civicrm-buildkit/bin/amp config:set --mysql_type=dsn --mysql_dsn=mysql://root@localhost --httpd_type=apache24 --perm_type=none
 
   if [ ! -e /var/www/.amp ]; then
     ln -s /var/www/civicrm/amp /var/www/.amp
