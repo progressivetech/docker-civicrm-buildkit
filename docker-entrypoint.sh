@@ -10,6 +10,10 @@ if [ "$1" = 'runsvdir' ]; then
     cd /var/www/civicrm && git clone https://github.com/civicrm/civicrm-buildkit.git
   fi
 
+  # Work-around until https://github.com/civicrm/civicrm-buildkit/issues/315
+  # is fixed.
+  sed -i "s/nodejs-legacy npm//" /var/www/civicrm/civicrm-buildkit/bin/civi-download-tools
+
   # This can be run over and over again - it will pull in any new dependencies.
   cd /var/www/civicrm/civicrm-buildkit && ./bin/civi-download-tools --full
 
