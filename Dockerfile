@@ -31,7 +31,12 @@ RUN apt-get update && \
   apache2 \
   nodejs-legacy \
   ruby\
-  rake
+  rake \
+  curl
+
+# Now upgrade npm and nodejs
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
+RUN apt-get install -y nodejs
 
 # Avoid key buffer size warnings and myisam-recover warnings
 # See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=751840
