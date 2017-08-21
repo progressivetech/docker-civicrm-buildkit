@@ -35,7 +35,7 @@ if ! docker images | grep ^civicrm-buildkit >/dev/null; then
 fi
 
 # If we haven't build the container, build the container
-if ! docker ps -a | grep ^civicrm-buildkit >/dev/null; then
+if ! docker ps -a | grep civicrm-buildkit >/dev/null; then
   printf "Building the container.\n"
   docker create -v "$(pwd)/civicrm:/var/www/civicrm" -e "DOCKER_UID=$UID" \
     -p 2222:22 -p 8001:8001 --name civicrm-buildkit civicrm-buildkit
