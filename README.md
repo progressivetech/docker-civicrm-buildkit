@@ -65,17 +65,15 @@ You have full access to the civicrm-buildkit directory from the host so you can 
 
 ## The workflow ##
 
- * ssh into the container (`ssh -p 2222 www-data@localhost`)
- * When running for the first time, set things up with:
-   `sudo /usr/local/sbin/civicrm-buildkit-setup`
- * run all buildkit commands to create the sites you want:
+* ssh into the container (`ssh -p 2222 www-data@localhost`)
+* When running for the first time, set things up with: `sudo /usr/local/sbin/civicrm-buildkit-setup`
+* run all buildkit commands to create the sites you want:
   * `amp test` 
   * `civibuild create mycivi --type drupal-clean --url http://localhost:8001 --admin-pass admin`
-
- * Maintenance tasks
+* Maintenance tasks
   * Destroy and start over:
-   * `civibuild create mycivi --force`
-   * Or...
+    * `civibuild create mycivi --force`
+  * Or...
     * `civibuild destroy mycivi`
     * `civibuild create mycivi --type drupal-clean --civi-ver 4.7 --url http://localhost:8001 --admin-pass admin`
   * Update civibuild code:
@@ -83,17 +81,17 @@ You have full access to the civicrm-buildkit directory from the host so you can 
     * `git pull`
     * `civi-download-tools`
 
- * Running unit tests (database setup should be working by default)
-   * `cd ~/civicrm/civicrm-buildkit/build/mycivi/sites/all/modules/civicrm/tools`
-   * `scripts/phpunit api_v3_ContactTest` (for example). See 
+* Running unit tests (database setup should be working by default)
+  * `cd ~/civicrm/civicrm-buildkit/build/mycivi/sites/all/modules/civicrm/tools`
+  * `scripts/phpunit api_v3_ContactTest` (for example). See 
      https://wiki.civicrm.org/confluence/display/CRM/Setting+up+your+personal+testing+sandbox+HOWTO
 
 More [documentation available via git](https://github.com/civicrm/civicrm-buildkit).
 
 Then, work via your host computer:
 
- * access your sites via a browser on your host computer (http://localhost:8001).
- * modify code via your editor on your host computer via the civicrm-buildkit directory
+* access your sites via a browser on your host computer (http://localhost:8001).
+* modify code via your editor on your host computer via the civicrm-buildkit directory
    (look in civicrm-buildkit/build/mycivi)
- * add git repositories, etc via your host computer
+* add git repositories, etc via your host computer
 
