@@ -81,6 +81,8 @@ You have full access to the civicrm-buildkit directory from the host so you can 
 
 All maintenance tasks should be run while you are in the container via ssh.
 
+Note: if you destroy or --force create, you will lose any un-committed code modifications and un-pushed git commits. Be sure to commit and push first! After re-creating you will need to add your git repositories all over again.
+
 * Destroy and start over:
   * `civibuild create mycivi --force`
 * Or...
