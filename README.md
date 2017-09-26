@@ -74,10 +74,12 @@ You have full access to the civicrm-buildkit directory from the host so you can 
 * Then, work via your host computer:
   * access your sites via a browser on your host computer (http://localhost:8001).
   * modify code via your editor on your host computer via the civicrm-buildkit directory
-   (look in civicrm-buildkit/build/mycivi)
+   (look in `civicrm-buildkit/build/mycivi`)
   * add git repositories, etc via your host computer
 
 ## Maintenance tasks
+
+All maintenance tasks should be run while you are in the container via ssh.
 
 * Destroy and start over:
   * `civibuild create mycivi --force`
@@ -91,13 +93,17 @@ You have full access to the civicrm-buildkit directory from the host so you can 
 
 ## Unit Tests
 
-The testing database will be setup by default. Simply login via ssh and (as an example):
+All tests should be run while you are in the container via ssh.
+
+The testing database will be setup by default. 
+
+Run a test with (for example):
 
 ```
 env CIVICRM_UF=UnitTests phpunit4 ./tests/phpunit/api/v3/CaseTest.php --filter testCaseCreate
 ```
 
-For more info on testing, see https://docs.civicrm.org/dev/en/latest/testing/phpunit/ 
+For more info on testing, see https://docs.civicrm.org/dev/en/latest/testing/phpunit/.
 
 ## More info
 
