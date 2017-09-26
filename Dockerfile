@@ -1,45 +1,38 @@
-FROM my-jessie:latest
+FROM my-stretch:latest
 MAINTAINER Jamie McClelland <jamie@progressivetech.org>
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
   apt-get install -y \
-  php5-mysql \
-  php-apc \
+  php-mysql \
+  php-apcu \
   mysql-server \
   mysql-client \
   openssh-server \
   bzip2 \
-  libapache2-mod-php5 \
+  libapache2-mod-php \
   runit \
   git \
   lsb-release \
   acl \
   wget \
   unzip \
-  php5-cli \
-  php5-imap \
-  php5-ldap \
-  php5-curl \
-  php5-intl \
-  php5-gd \
+  php-cli \
+  php-imap \
+  php-ldap \
+  php-curl \
+  php-intl \
+  php-gd \
+  php-xml \
   sudo \
   vim \
-  npm \
-  php5-mcrypt \
+  php-mcrypt \
   apache2 \
-  ruby\
+  ruby \
+  gnupg \
   rake \
+  bsdmainutils \
   curl
-
-# Now upgrade npm and nodejs
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install -y nodejs
-
-# Avoid key buffer size warnings and myisam-recover warnings
-# See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=751840
-RUN sed -i "s/^key_buffer\s/key_buffer_size\t/g" /etc/mysql/my.cnf
-RUN sed -i "s/^myisam-recover\s/myisam-recover-options\t/g" /etc/mysql/my.cnf
 
 # Avoid Apache complaint about server name
 RUN echo "ServerName civicrm-buildkit" > /etc/apache2/conf-available/civicrm-buildkit.conf
@@ -53,7 +46,7 @@ RUN a2enmod rewrite
 RUN ln -s /bin/true /usr/sbin/sendmail
 
 # Handle service starting with runit.
-RUN mkdir /etc/sv/mysql /etc/sv/apache /etc/sv/sshd
+RUN mkdir /etc/sv/mysql /etc/sv/apache /etc/sv/sshd /var/lib/supervise
 COPY mysql.run /etc/sv/mysql/run
 COPY apache.run /etc/sv/apache/run
 COPY sshd.run /etc/sv/sshd/run
@@ -73,8 +66,12 @@ RUN mkdir /var/www/civicrm
 # Ensure www-data owns it's home directory so amp will work.
 RUN chown -R www-data:www-data /var/www
 
-# Allow www-data user to restart apache
-RUN echo "www-data ALL=NOPASSWD: /usr/bin/sv restart apache, /usr/bin/sv reload apache, /usr/sbin/apache2ctl" > /etc/sudoers.d/civicrm-buildkit
+# Copy setup template file - it will be populated and executed when the
+# container is started.
+COPY civicrm-buildkit-setup /usr/local/sbin/
+
+# Allow www-data user to restart apache and execute post setup tool.
+RUN echo "www-data ALL=NOPASSWD: /usr/bin/sv restart apache, /usr/bin/sv reload apache, /usr/sbin/apache2ctl, /usr/local/sbin/civicrm-buildkit-setup" > /etc/sudoers.d/civicrm-buildkit
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

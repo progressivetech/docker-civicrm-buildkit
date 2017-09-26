@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Script to be run as root after container is started to properly set permissions.
+
+## For the www-data user to access the tests database.
+# Grant rights in database.
+mysql -e 'CREATE DATABASE IF NOT EXISTS civicrm_tests_dev' 
+mysql -e "GRANT ALL ON civicrm_tests_dev.* TO 'www-data'@'localhost' IDENTIFIED BY 'WWWDATAPASSWORD'"
+
+# Create conf files.
+printf "[client]\npassword=%s\n[mysql]\ndatabase=civicrm_tests_dev\n" "WWWDATAPASSWORD" > /var/www/.my.cnf
+chown www-data /var/www/.my.cnf
+chmod 600 /var/www/.my.cnf
+
+## For the root user.
+mysql -e "SET PASSWORD FOR root@localhost = PASSWORD('ROOTPASSWORD')"
+printf "[client]\npassword=%s\n[mysql]\n" "ROOTPASSWORD" > /root/.my.cnf
+chmod 600 /root/.my.cnf
+
+## Turn off the socket plugin so other users can login as root.
+mysql -e "UPDATE user SET plugin = '' WHERE User = 'root'" mysql
+
+## Flush privileges
+mysql -e "FLUSH PRIVILEGES"
+
+## Configure amp
+printf "parameters:
+  version: 2
+  httpd_type: apache24
+  db_type: mysql_dsn
+  mysql_type: dsn
+  mysql_dsn: mysql://root:ROOTPASSWORD@localhost
+  perm_type: none
+  hosts_type: none
+  httpd_restart_command: 'sudo /usr/sbin/apache2ctl graceful'
+services: { }\n" > /var/www/.amp/services.yml
+chown www-data:www-data /var/www/.amp/services.yml
+
+
+

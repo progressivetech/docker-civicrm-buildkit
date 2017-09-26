@@ -13,15 +13,17 @@ Instead, create your own base image by running these commands AS ROOT (adjust th
 ```
 temp=$(mktemp -d)
 apt-get install debootstrap
-debootstrap --variant=minbase --include=apt-utils,less,vim,locales,libterm-readline-gnu-perl jessie "$temp" http://http.us.debian.org/debian/ 
+export LC_ALL=C && debootstrap --variant=minbase --include=apt-utils,less,iputils-ping,iproute2,vim,locales,libterm-readline-gnu-perl,dnsutils,procps stretch "$temp" http://http.us.debian.org/debian/
+
+echo "America/New_York" > "$temp/etc/timezone"
+chroot "$temp" /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
 echo "deb http://security.debian.org/ jessie/updates main" > "$temp/etc/apt/sources.list.d/security.list"
 echo "deb http://ftp.us.debian.org/debian/ jessie-updates main" > "$temp/etc/apt/sources.list.d/update.list"
 echo "Upgrading"
 chroot "$temp" apt-get update
 chroot "$temp" apt-get -y dist-upgrade
 # Make all servers America/New_York
-echo "America/New_York" > "$temp/etc/timezone"
-chroot "$temp" /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
+
 echo "Importing into docker"
 cd "$temp" && tar -c . | docker import - my-jessie 
 cd
@@ -64,12 +66,11 @@ You have full access to the civicrm-buildkit directory from the host so you can 
 ## The workflow ##
 
  * ssh into the container (`ssh -p 2222 www-data@localhost`)
+ * When running for the first time, set things up with:
+   `sudo /usr/local/sbin/civicrm-buildkit-setup`
  * run all buildkit commands to create the sites you want:
   * `amp test` (first test, should fail)
-  * `sudo apache2ctl graceful`
-  * `amp test` (second test, should pass)
   * `civibuild create mycivi --type drupal-clean --url http://localhost:8001 --admin-pass admin`
-  * `sudo apache2ctl graceful`
 
  * Maintenance tasks
   * Destroy and start over:

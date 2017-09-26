@@ -7,21 +7,22 @@ if [ "$1" = 'runsvdir' ]; then
   # directory is intact, it should not be re-created.
   if [ ! -d /var/www/civicrm/civicrm-buildkit ]; then
     printf "Initializing civicrm-buildkit.\n"
-    cd /var/www/civicrm && git clone https://github.com/civicrm/civicrm-buildkit.git
+    cd /var/www/civicrm && \
+      git clone git@github.com:progressivetech/civicrm-buildkit.git && \
+      cd civicrm-buildkit && \
+      git checkout eefab5b3e124582a44bdba90f973044b7c8a9b7f
+
+    # This can be run over and over again - it will pull in any new dependencies. We only
+    # run once here.
+    cd /var/www/civicrm/civicrm-buildkit && ./bin/civi-download-tools --full
   fi
 
-  # Work-around until https://github.com/civicrm/civicrm-buildkit/issues/315
-  # is fixed.
-  sed -i "s/nodejs-legacy npm//" /var/www/civicrm/civicrm-buildkit/bin/civi-download-tools
-
-  # This can be run over and over again - it will pull in any new dependencies.
-  cd /var/www/civicrm/civicrm-buildkit && ./bin/civi-download-tools --full
-
-  ## Configure amp
-  sudo -u www-data -H /var/www/civicrm/civicrm-buildkit/bin/amp config:set --mysql_type=dsn --mysql_dsn=mysql://root@localhost --httpd_type=apache24 --perm_type=none
-
-  if [ ! -e /var/www/.amp ]; then
-    ln -s /var/www/civicrm/amp /var/www/.amp
+  if grep 'ROOTPASSWORD' /usr/local/sbin/civicrm-buildkit-setup > /dev/null; then
+    # Generate passwords and file in setup template.
+    www_pass=$(hexdump -e '"%_p"' /dev/urandom | tr -d '[:punct:][:blank:]' | tr -d ' /'| head -c 25)
+    sed -i "s/WWWDATAPASSWORD/${www_pass}/g" /usr/local/sbin/civicrm-buildkit-setup || printf "Problem with password '%s'\n" "$www_pass"
+    root_pass=$(hexdump -e '"%_p"' /dev/urandom | tr -d '[:punct:][:blank:]' | tr -d ' /' | head -c 25)
+    sed -i "s/ROOTPASSWORD/${root_pass}/g" /usr/local/sbin/civicrm-buildkit-setup || printf "Problem with password '%s'\n" "$root_pass"
   fi
 
   # Ensure that apache is configured to work properly with AMP. We don't do this in the 
@@ -60,15 +61,6 @@ if [ "$1" = 'runsvdir' ]; then
   fi
   export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
   set -- "$@" -P /etc/service
-
-  # Create permissions for tests database so we can run unit tests
-  printf "[client]\npassword=www-data\n[mysql]\ndatabase=civicrm_tests_dev\n" > /var/www/.my.cnf
-  chown www-data:www-data /var/www/.my.cnf
-  chmod 600 /var/www/.my.cnf
-
-  # Run these commands after the container is built...
-  #mysql -e 'CREATE DATABASE IF NOT EXISTS civicrm_tests_dev'
-  #mysql -e "GRANT ALL ON civicrm_tests_dev.* TO 'www-data'@'localhost' IDENTIFIED BY 'www-data'"
 fi
 
 exec "$@"
