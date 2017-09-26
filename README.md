@@ -90,10 +90,16 @@ You have full access to the civicrm-buildkit directory from the host so you can 
 
 ## Unit Tests
 
-* Running unit tests (database setup should be working by default)
-  * `env CIVICRM_UF=UnitTests phpunit4 ./tests/phpunit/api/v3/CaseTest.php --filter testCaseCreate` (for example)
-  * See https://docs.civicrm.org/dev/en/latest/testing/phpunit/ 
+The testing database will be setup by default. Simply login via ssh and (as an example):
 
-More [documentation available via git](https://github.com/civicrm/civicrm-buildkit).
+```
+env CIVICRM_UF=UnitTests phpunit4 ./tests/phpunit/api/v3/CaseTest.php --filter testCaseCreate
+```
+
+For more info on testing, see https://docs.civicrm.org/dev/en/latest/testing/phpunit/ 
+
+## More info
+
+More [documentation is available via git](https://github.com/civicrm/civicrm-buildkit).
 
 
