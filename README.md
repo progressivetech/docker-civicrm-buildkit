@@ -69,7 +69,7 @@ You have full access to the civicrm-buildkit directory from the host so you can 
  * When running for the first time, set things up with:
    `sudo /usr/local/sbin/civicrm-buildkit-setup`
  * run all buildkit commands to create the sites you want:
-  * `amp test` (first test, should fail)
+  * `amp test` 
   * `civibuild create mycivi --type drupal-clean --url http://localhost:8001 --admin-pass admin`
 
  * Maintenance tasks

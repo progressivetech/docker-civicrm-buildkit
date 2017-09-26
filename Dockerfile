@@ -27,12 +27,18 @@ RUN apt-get update && \
   sudo \
   vim \
   php-mcrypt \
+  php-mbstring \
   apache2 \
   ruby \
   gnupg \
   rake \
   bsdmainutils \
   curl
+
+# Now install npm/nodejs
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get install -y nodejs
+
 
 # Avoid Apache complaint about server name
 RUN echo "ServerName civicrm-buildkit" > /etc/apache2/conf-available/civicrm-buildkit.conf
