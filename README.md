@@ -70,6 +70,7 @@ You have full access to the civicrm-buildkit directory from the host so you can 
 * run all buildkit commands to create the sites you want:
   * `amp test` 
   * `civibuild create mycivi --type drupal-clean --url http://localhost:8001 --admin-pass admin`
+  * Learn [more civibuild commands](https://docs.civicrm.org/dev/en/latest/tools/civibuild/)
 * Then, work via your host computer:
   * access your sites via a browser on your host computer (http://localhost:8001).
   * modify code via your editor on your host computer via the civicrm-buildkit directory
