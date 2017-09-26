@@ -1,7 +1,7 @@
 # CiviCRM Buildkit Docker Image #
 
 ## Summary ##
-Builds a completely self-contained container that runs [CiviCRM Buildkit](https://github.com/civicrm/civicrm-buildkit) via MySQL, Apache, PHP and SSH. It manages services using runit.
+Builds a completely self-contained container that runs [CiviCRM Buildkit](https://github.com/civicrm/civicrm-buildkit) via MySQL, Apache, PHP and SSH in a Debian Stretch container. It manages services using runit.
 
 The civicrm-buildkit directory is available on the host and in the container.
 
