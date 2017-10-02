@@ -24,6 +24,9 @@ RUN apt-get update && \
   php-intl \
   php-gd \
   php-xml \
+  php-bcmath \
+  php-soap \
+  php-zip \
   sudo \
   vim \
   php-mcrypt \
