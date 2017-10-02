@@ -29,7 +29,7 @@ printf "parameters:
   httpd_type: apache24
   db_type: mysql_dsn
   mysql_type: dsn
-  mysql_dsn: mysql://root:ROOTPASSWORD@localhost
+  mysql_dsn: mysql://root:ROOTPASSWORD@localhost:3306
   perm_type: none
   hosts_type: none
   httpd_restart_command: 'sudo /usr/sbin/apache2ctl graceful'

@@ -87,7 +87,7 @@ Note: if you destroy or --force create, you will lose any un-committed code modi
   * `civibuild create mycivi --force`
 * Or...
   * `civibuild destroy mycivi`
-  * `civibuild create mycivi --type drupal-clean --civi-ver 4.7 --url http://localhost:8001 --admin-pass admin`
+  * `civibuild create mycivi --type drupal-clean --civi-ver master --url http://localhost:8001 --admin-pass admin`
 * Update civibuild code:
   * `cd /var/www/civicrm/civicrm-buildkit`
   * `git pull`
