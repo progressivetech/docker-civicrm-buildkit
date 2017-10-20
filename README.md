@@ -17,15 +17,15 @@ export LC_ALL=C && debootstrap --variant=minbase --include=apt-utils,less,iputil
 
 echo "America/New_York" > "$temp/etc/timezone"
 chroot "$temp" /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
-echo "deb http://security.debian.org/ jessie/updates main" > "$temp/etc/apt/sources.list.d/security.list"
-echo "deb http://ftp.us.debian.org/debian/ jessie-updates main" > "$temp/etc/apt/sources.list.d/update.list"
+echo "deb http://security.debian.org/ stretch/updates main" > "$temp/etc/apt/sources.list.d/security.list"
+echo "deb http://ftp.us.debian.org/debian/ stretch-updates main" > "$temp/etc/apt/sources.list.d/update.list"
 echo "Upgrading"
 chroot "$temp" apt-get update
 chroot "$temp" apt-get -y dist-upgrade
 # Make all servers America/New_York
 
 echo "Importing into docker"
-cd "$temp" && tar -c . | docker import - my-jessie 
+cd "$temp" && tar -c . | docker import - my-stretch
 cd
 echo "Removing temp directory"
 rm -rf "$temp"

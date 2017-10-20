@@ -14,9 +14,9 @@ if ! echo "$groups" | grep " docker " >/dev/null; then
 fi
 
 # Ensure the base image is created.
-if ! docker images | grep ^my-jessie >/dev/null; then
+if ! docker images | grep ^my-stretch >/dev/null; then
   # You have to create the base image as root. No automation here.
-  printf "Follow directions in README to build base my-jessie image\n"
+  printf "Follow directions in README to build base my-stretch image\n"
   exit 1
 fi
 
