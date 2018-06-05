@@ -8,9 +8,7 @@ if [ "$1" = 'runsvdir' ]; then
   if [ ! -d /var/www/civicrm/civicrm-buildkit ]; then
     printf "Initializing civicrm-buildkit.\n"
     cd /var/www/civicrm && \
-      git clone git@github.com:progressivetech/civicrm-buildkit.git && \
-      cd civicrm-buildkit && \
-      git checkout fed0d699dd1dece8ac0b9dc5508b56ea9a282933 
+      git clone https://github.com/civicrm/civicrm-buildkit.git
 
     # This can be run over and over again - it will pull in any new dependencies. We only
     # run once here.
