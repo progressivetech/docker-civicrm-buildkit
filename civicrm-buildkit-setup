@@ -32,7 +32,7 @@ printf "parameters:
   mysql_dsn: mysql://root:ROOTPASSWORD@127.0.0.1:3306
   perm_type: none
   hosts_type: none
-  httpd_restart_command: 'sudo /usr/sbin/apache2ctl graceful',
+  httpd_restart_command: sudo /usr/sbin/apache2ctl graceful
   httpd_visibility: all
 services: { }\n" > /var/www/.amp/services.yml
 chown www-data:www-data /var/www/.amp/services.yml
