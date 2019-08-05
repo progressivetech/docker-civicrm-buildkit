@@ -1,13 +1,11 @@
-FROM my-stretch:latest
+FROM my-buster:latest
 MAINTAINER Jamie McClelland <jamie@progressivetech.org>
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
   apt-get install -y \
-  php-mysql \
-  php-apcu \
-  mysql-server \
-  mysql-client \
+  default-mysql-server \
+  default-mysql-client \
   openssh-server \
   bzip2 \
   libapache2-mod-php \
@@ -17,31 +15,14 @@ RUN apt-get update && \
   acl \
   wget \
   unzip \
-  php-cli \
-  php-imap \
-  php-ldap \
-  php-curl \
-  php-intl \
-  php-gd \
-  php-xml \
-  php-bcmath \
-  php-soap \
-  php-zip \
   sudo \
   vim \
-  php-mcrypt \
-  php-mbstring \
   apache2 \
   ruby \
   gnupg \
   rake \
   bsdmainutils \
   curl
-
-# Now install npm/nodejs
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install -y nodejs
-
 
 # Avoid Apache complaint about server name
 RUN echo "ServerName civicrm-buildkit" > /etc/apache2/conf-available/civicrm-buildkit.conf
@@ -83,5 +64,12 @@ COPY civicrm-buildkit-setup /usr/local/sbin/
 RUN echo "www-data ALL=NOPASSWD: /usr/bin/sv restart apache, /usr/bin/sv reload apache, /usr/sbin/apache2ctl, /usr/local/sbin/civicrm-buildkit-setup" > /etc/sudoers.d/civicrm-buildkit
 
 COPY docker-entrypoint.sh /entrypoint.sh
+
+# For now we have to patch civi-download-tools so it is buster compatible.
+# See: https://github.com/civicrm/civicrm-buildkit/issues/462
+# When this is fixed, we should remove the patch and also
+# fix line in docker-entrypoint.sh
+COPY civi-download-tools.patch /civi-download-tools.patch
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["runsvdir"]

@@ -5,16 +5,18 @@
 ## For the www-data user to access the tests database.
 # Grant rights in database.
 mysql -e 'CREATE DATABASE IF NOT EXISTS civicrm_tests_dev' 
-mysql -e "GRANT ALL ON civicrm_tests_dev.* TO 'www-data'@'localhost' IDENTIFIED BY 'WWWDATAPASSWORD'"
+mysql -e "GRANT ALL ON civicrm_tests_dev.* TO 'www-data'@'localhost' IDENTIFIED BY 'WWWDATAREPLACEPASSWORD'"
 
 # Create conf files.
-printf "[client]\npassword=%s\n[mysql]\ndatabase=civicrm_tests_dev\n" "WWWDATAPASSWORD" > /var/www/.my.cnf
-chown www-data /var/www/.my.cnf
-chmod 600 /var/www/.my.cnf
+# NOTE: if www-data has a .my.cnf it will interfere with drush. So name it my.cnf so we can still
+# use it via mysql --defaults-file=/var/www/my.cnf but it won't interfere with drush.
+printf "[client]\npassword=%s\n[mysql]\ndatabase=civicrm_tests_dev\n" "WWWDATAREPLACEPASSWORD" > /var/www/my.cnf
+chown www-data /var/www/my.cnf
+chmod 600 /var/www/my.cnf
 
 ## For the root user.
-mysql -e "SET PASSWORD FOR root@localhost = PASSWORD('ROOTPASSWORD')"
-printf "[client]\npassword=%s\n[mysql]\n" "ROOTPASSWORD" > /root/.my.cnf
+mysql -e "SET PASSWORD FOR root@localhost = PASSWORD('ROOTREPLACEPASSWORD')"
+printf "[client]\npassword=%s\n[mysql]\n" "ROOTREPLACEPASSWORD" > /root/.my.cnf
 chmod 600 /root/.my.cnf
 
 ## Turn off the socket plugin so other users can login as root.
@@ -29,7 +31,7 @@ printf "parameters:
   httpd_type: apache24
   db_type: mysql_dsn
   mysql_type: dsn
-  mysql_dsn: mysql://root:ROOTPASSWORD@127.0.0.1:3306
+  mysql_dsn: mysql://root:ROOTREPLACEPASSWORD@127.0.0.1:3306
   perm_type: none
   hosts_type: none
   httpd_restart_command: sudo /usr/sbin/apache2ctl graceful

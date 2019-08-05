@@ -10,17 +10,21 @@ if [ "$1" = 'runsvdir' ]; then
     cd /var/www/civicrm && \
       git clone https://github.com/civicrm/civicrm-buildkit.git
 
+    # Patch it. 
+    # See: https://github.com/civicrm/civicrm-buildkit/issues/462
+    cd /var/www/civicrm/civicrm-buildkit/bin && patch -p0 < /civi-download-tools.patch
+
     # This can be run over and over again - it will pull in any new dependencies. We only
     # run once here.
     cd /var/www/civicrm/civicrm-buildkit && ./bin/civi-download-tools --full
   fi
 
-  if grep 'ROOTPASSWORD' /usr/local/sbin/civicrm-buildkit-setup > /dev/null; then
+  if grep 'ROOTREPLACEPASSWORD' /usr/local/sbin/civicrm-buildkit-setup > /dev/null; then
     # Generate passwords and file in setup template.
-    www_pass=$(hexdump -e '"%_p"' /dev/urandom | tr -d '[:punct:][:blank:]' | tr -d ' /'| head -c 25)
-    sed -i "s/WWWDATAPASSWORD/${www_pass}/g" /usr/local/sbin/civicrm-buildkit-setup || printf "Problem with password '%s'\n" "$www_pass"
-    root_pass=$(hexdump -e '"%_p"' /dev/urandom | tr -d '[:punct:][:blank:]' | tr -d ' /' | head -c 25)
-    sed -i "s/ROOTPASSWORD/${root_pass}/g" /usr/local/sbin/civicrm-buildkit-setup || printf "Problem with password '%s'\n" "$root_pass"
+    www_pass=$(hexdump -e '"%_p"' /dev/urandom | tr -d '[:punct:][:blank:]' | tr -d ' /\n'| head -c 25)
+    sed -i "s/WWWDATAREPLACEPASSWORD/${www_pass}/g" /usr/local/sbin/civicrm-buildkit-setup || printf "Problem with password '%s'\n" "$www_pass"
+    root_pass=$(hexdump -e '"%_p"' /dev/urandom | tr -d '[:punct:][:blank:]' | tr -d ' /\n' | head -c 25)
+    sed -i "s/ROOTREPLACEPASSWORD/${root_pass}/g" /usr/local/sbin/civicrm-buildkit-setup || printf "Problem with password '%s'\n" "$root_pass"
   fi
 
   # Ensure that apache is configured to work properly with AMP. We don't do this in the 
