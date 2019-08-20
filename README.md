@@ -103,7 +103,7 @@ Run a test with (for example):
 
 ```
 cd /var/www/civicrm/civicrm-buildkit/build/mycivi/web/sites/all/modules/civicrm
-env CIVICRM_UF=UnitTests phpunit4 ./tests/phpunit/api/v3/CaseTest.php --filter testCaseCreate
+env CIVICRM_UF=UnitTests phpunit5 ./tests/phpunit/api/v3/CaseTest.php --filter testCaseCreate
 ```
 
 For more info on testing, see https://docs.civicrm.org/dev/en/latest/testing/phpunit/.
