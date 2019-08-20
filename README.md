@@ -102,7 +102,7 @@ The testing database will be setup by default.
 Run a test with (for example):
 
 ```
-cd /var/www/civicrm/civicrm-buildkit/build/mycivi/sites/all/modules/civicrm
+cd /var/www/civicrm/civicrm-buildkit/build/mycivi/web/sites/all/modules/civicrm
 env CIVICRM_UF=UnitTests phpunit4 ./tests/phpunit/api/v3/CaseTest.php --filter testCaseCreate
 ```
 
