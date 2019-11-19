@@ -22,6 +22,9 @@ RUN apt-get update && \
   gnupg \
   rake \
   bsdmainutils \
+  php-simplexml \
+  php-curl \
+  php-mysql \
   curl
 
 # Avoid Apache complaint about server name
