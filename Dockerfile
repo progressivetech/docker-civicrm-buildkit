@@ -1,4 +1,4 @@
-FROM my-buster:latest
+FROM my-bullseye:latest
 MAINTAINER Jamie McClelland <jamie@progressivetech.org>
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -39,13 +39,11 @@ RUN a2enmod rewrite
 RUN ln -s /bin/true /usr/sbin/sendmail
 
 # Handle service starting with runit.
-RUN mkdir /etc/sv/mysql /etc/sv/apache /etc/sv/sshd /var/lib/supervise
+RUN mkdir /etc/sv/mysql /etc/sv/apache /var/lib/supervise
 COPY mysql.run /etc/sv/mysql/run
 COPY apache.run /etc/sv/apache/run
-COPY sshd.run /etc/sv/sshd/run
 RUN update-service --add /etc/sv/mysql
 RUN update-service --add /etc/sv/apache
-RUN update-service --add /etc/sv/sshd
 
 # Give ssh access via key
 RUN mkdir /var/www/.ssh
@@ -67,12 +65,6 @@ COPY civicrm-buildkit-setup /usr/local/sbin/
 RUN echo "www-data ALL=NOPASSWD: /usr/bin/sv restart apache, /usr/bin/sv reload apache, /usr/sbin/apache2ctl, /usr/local/sbin/civicrm-buildkit-setup" > /etc/sudoers.d/civicrm-buildkit
 
 COPY docker-entrypoint.sh /entrypoint.sh
-
-# For now we have to patch civi-download-tools so it is buster compatible.
-# See: https://github.com/civicrm/civicrm-buildkit/issues/462
-# When this is fixed, we should remove the patch and also
-# fix line in docker-entrypoint.sh
-COPY civi-download-tools.patch /civi-download-tools.patch
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["runsvdir"]
