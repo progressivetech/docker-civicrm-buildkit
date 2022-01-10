@@ -20,7 +20,9 @@ printf "[client]\npassword=%s\n[mysql]\n" "ROOTREPLACEPASSWORD" > /root/.my.cnf
 chmod 600 /root/.my.cnf
 
 ## Turn off the socket plugin so other users can login as root.
-mysql -e "UPDATE user SET plugin = '' WHERE User = 'root'" mysql
+# This fails with newere version of mariadb and appears to no longer
+# be necessary.
+#mysql -e "UPDATE user SET plugin = '' WHERE User = 'root'" mysql
 
 ## Flush privileges
 mysql -e "FLUSH PRIVILEGES"
