@@ -13,19 +13,19 @@ Instead, create your own base image by running these commands AS ROOT (adjust th
 ```
 temp=$(mktemp -d)
 apt-get install debootstrap
-export LC_ALL=C && debootstrap --variant=minbase --include=apt-utils,less,iputils-ping,iproute2,vim,locales,libterm-readline-gnu-perl,dnsutils,procps stretch "$temp" http://http.us.debian.org/debian/
+export LC_ALL=C && debootstrap --variant=minbase --include=apt-utils,less,iputils-ping,iproute2,vim,locales,libterm-readline-gnu-perl,dnsutils,procps bullseye "$temp" http://http.us.debian.org/debian/
 
 echo "America/New_York" > "$temp/etc/timezone"
 chroot "$temp" /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
-echo "deb http://security.debian.org/ stretch/updates main" > "$temp/etc/apt/sources.list.d/security.list"
-echo "deb http://ftp.us.debian.org/debian/ stretch-updates main" > "$temp/etc/apt/sources.list.d/update.list"
+echo "deb http://security.debian.org/ bullseye-security main" > "$temp/etc/apt/sources.list.d/security.list"
+echo "deb http://ftp.us.debian.org/debian/ bullseye-updates main" > "$temp/etc/apt/sources.list.d/update.list"
 echo "Upgrading"
 chroot "$temp" apt-get update
 chroot "$temp" apt-get -y dist-upgrade
 # Make all servers America/New_York
 
 echo "Importing into docker"
-cd "$temp" && tar -c . | docker import - my-stretch
+cd "$temp" && tar -c . | docker import - my-bullseye
 cd
 echo "Removing temp directory"
 rm -rf "$temp"
